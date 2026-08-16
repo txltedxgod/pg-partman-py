@@ -1,0 +1,5 @@
+psycopg[binary]>=3.1.18
+click>=8.1.7
+pyyaml>=6.0.1
+schedule>=1.2.1
+pytest>=7.4.0
