@@ -1,0 +1,12 @@
+database_url: "postgres://postgres:secret@localhost:5432/appdb"
+
+tables:
+  - name: "http_access_logs"
+    interval: "daily"
+    premake_days: 14
+    retention_days: 90
+
+  - name: "device_telemetry_events"
+    interval: "daily"
+    premake_days: 7
+    retention_days: 30
