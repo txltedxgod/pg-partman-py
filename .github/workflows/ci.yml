@@ -2,22 +2,35 @@ name: Python CI
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main", "feat/*"]
   pull_request:
-    branches: [ main ]
+    branches: ["main"]
 
 jobs:
-  lint:
+  lint-and-test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
+          cache: pip
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt ruff
           pip install -e .
+
+      - name: Lint with Ruff
+        run: ruff check .
+
+      - name: Run unit tests
+        run: pytest -v tests/
